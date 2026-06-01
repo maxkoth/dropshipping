@@ -1,0 +1,35 @@
+Handle,Title,Body (HTML),Vendor,Type,Tags,Published,Option1 Name,Option1 Value,Variant SKU,Variant Grams,Variant Inventory Tracker,Variant Inventory Qty,Variant Inventory Policy,Variant Fulfillment Service,Variant Price,Variant Compare At Price,Variant Requires Shipping,Variant Taxable,Variant Weight Unit,Image Src,Image Position,SEO Title,SEO Description,Status
+glowlab-pro-led-face-mask,GlowLab Pro LED Face Mask,"<h3>Clinic-inspired LED light therapy &mdash; at home in 10 minutes a day</h3>
+<p>The GlowLab Pro brings 7-wavelength LED light therapy into your daily routine. With 136 LED chips spanning red, blue, green, yellow and infrared light, it's designed to support clearer, brighter, healthier-looking skin.</p>
+<ul>
+<li><strong>7 wavelengths &middot; 136 LED chips</strong> &mdash; broader coverage than typical 3&ndash;4 light masks</li>
+<li><strong>Red light</strong> helps support collagen and the look of fine lines</li>
+<li><strong>Blue light</strong> targets acne-causing bacteria on the skin's surface</li>
+<li><strong>Green &amp; yellow light</strong> help with the appearance of dark spots and redness</li>
+<li><strong>10-minute auto shut-off</strong> &mdash; hands-free, rechargeable, travel-friendly</li>
+<li><strong>60-day money-back guarantee</strong> + free shipping</li>
+</ul>
+<p><em>Results vary. GlowLab is a cosmetic skincare device and is not intended to diagnose, treat, cure, or prevent any disease or medical condition. Consult a dermatologist for medical skin concerns.</em></p>",GlowLab,Beauty Device,"LED face mask, light therapy, skincare, beauty tech, acne, anti-aging",TRUE,Color,Pearl White,GLAB-LED-001-PW,450,,,continue,manual,97.00,156.00,TRUE,TRUE,g,,,GlowLab Pro LED Face Mask | 7-Wavelength Light Therapy | $97,"Buy the GlowLab Pro LED Face Mask. 136 LED chips, 7 wavelengths. Helps support clearer skin, fewer fine lines and brighter tone. Free shipping. 60-day guarantee.",active
+glowlab-pro-led-face-mask,,,,,,,,Midnight Black,GLAB-LED-001-BK,450,,,continue,manual,97.00,156.00,TRUE,TRUE,g,,,,,active
+glowlab-pro-led-face-mask,,,,,,,,Rose Gold,GLAB-LED-001-RG,450,,,continue,manual,97.00,156.00,TRUE,TRUE,g,,,,,active
+glowlab-radiance-serum,GlowLab Radiance Serum (30ml),"<h3>GlowLab Radiance Serum &mdash; made for post-LED skin</h3>
+<p>A lightweight daily serum formulated to pair with your LED routine. Niacinamide, hyaluronic acid, vitamin C and bakuchiol help hydrate, brighten and support a smoother-looking complexion.</p>
+<ul>
+<li>2% Niacinamide &mdash; helps with the look of uneven tone</li>
+<li>Hyaluronic acid &mdash; deep hydration</li>
+<li>Vitamin C &amp; bakuchiol &mdash; brightening, gentle support</li>
+<li>30ml &middot; cruelty-free</li>
+</ul>
+<p><em>Cosmetic product. Patch test before first use.</em></p>",GlowLab,Skincare,"serum, niacinamide, vitamin c, skincare, upsell",TRUE,Size,30ml,GLAB-SER-001,120,,,continue,manual,36.00,49.00,TRUE,TRUE,g,,,GlowLab Radiance Serum 30ml | Niacinamide + Vitamin C,"The GlowLab Radiance Serum: niacinamide, hyaluronic acid, vitamin C and bakuchiol to hydrate and brighten. Designed to pair with LED therapy.",active
+glowlab-mask-serum-bundle,GlowLab Pro LED Mask + Serum Bundle,"<h3>GlowLab Pro LED Mask + Radiance Serum</h3>
+<p>The complete glow routine: the 7-wavelength GlowLab Pro LED mask paired with the Radiance Serum, formulated to absorb into freshly-treated skin. Save versus buying separately.</p><h3>Clinic-inspired LED light therapy &mdash; at home in 10 minutes a day</h3>
+<p>The GlowLab Pro brings 7-wavelength LED light therapy into your daily routine. With 136 LED chips spanning red, blue, green, yellow and infrared light, it's designed to support clearer, brighter, healthier-looking skin.</p>
+<ul>
+<li><strong>7 wavelengths &middot; 136 LED chips</strong> &mdash; broader coverage than typical 3&ndash;4 light masks</li>
+<li><strong>Red light</strong> helps support collagen and the look of fine lines</li>
+<li><strong>Blue light</strong> targets acne-causing bacteria on the skin's surface</li>
+<li><strong>Green &amp; yellow light</strong> help with the appearance of dark spots and redness</li>
+<li><strong>10-minute auto shut-off</strong> &mdash; hands-free, rechargeable, travel-friendly</li>
+<li><strong>60-day money-back guarantee</strong> + free shipping</li>
+</ul>
+<p><em>Results vary. GlowLab is a cosmetic skincare device and is not intended to diagnose, treat, cure, or prevent any disease or medical condition. Consult a dermatologist for medical skin concerns.</em></p>",GlowLab,Beauty Device,"bundle, LED face mask, serum, value",TRUE,Bundle,Mask + Serum,GLAB-BUNDLE-001,570,,,continue,manual,115.00,175.00,TRUE,TRUE,g,,,GlowLab LED Mask + Radiance Serum Bundle | Save,"The complete GlowLab glow routine: 7-wavelength LED mask + Radiance Serum. Save versus buying separately. Free shipping, 60-day guarantee.",active
