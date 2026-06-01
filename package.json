@@ -10,6 +10,8 @@
     "screen:live":   "node screener/rugcheck.js",
     "momentum:live": "node strategies/momentum.js",
     "signals":    "node signals/engine.js --dry-run",
+    "signals:live":  "node signals/engine.js",
+    "play":          "node research/discover.js --chain solana && node screener/rugcheck.js && node signals/engine.js && node strategies/momentum.js",
     "sentiment":  "node signals/sentiment.js --ticker BONK --dry-run",
     "momentum":   "node strategies/momentum.js --dry-run",
     "sniper":     "node strategies/new-launch-sniper.js --dry-run",
