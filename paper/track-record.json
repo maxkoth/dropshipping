@@ -9,15 +9,29 @@
     "data_source": "live prices pasted by the user each round; the assistant cannot fetch prices from its sandbox"
   },
   "bankroll_usd": 10000,
-  "open_positions": [],
+  "cash_usd": 9000,
+  "open_positions": [
+    {
+      "round": 1,
+      "symbol": "PENGU",
+      "name": "Pudgy Penguins",
+      "chain": "solana",
+      "opened_at": "2026-06-01",
+      "entry_price_usd": 0.007881,
+      "stake_usd": 1000,
+      "token_quantity": 126887.45,
+      "thesis": "Top-tier liquid Solana meme (surfaced as a current leader with ~$73M/24h volume). Buying into a modest pullback (-1.9% 24h, -11.7% 7d) on a strong-community name rather than chasing a thin micro-cap. Daily mark-to-market.",
+      "price_source": "WebSearch consensus (CoinMarketCap), entry uncertainty ~±3%"
+    }
+  ],
   "closed_trades": [],
   "stats": {
-    "rounds_played": 0,
+    "rounds_played": 1,
     "closed_trades": 0,
     "win_rate": null,
     "total_realized_pnl_usd": 0,
     "best_trade": null,
     "worst_trade": null
   },
-  "history_note": "First entry is recorded on the first 'go' that includes live data."
+  "history_note": "Round 1 (2026-06-01): opened PENGU @ $0.007881, $1000 stake."
 }
