@@ -103,6 +103,7 @@ async function runPipeline() {
   console.log(`📊 Market volume: $${volumeB.toFixed(1)}B — pipeline active\n`);
 
   const steps = [
+    { name: "Discovery",     script: "research/discover.js" },
     { name: "Rug Screener",  script: "screener/rugcheck.js" },
     { name: "Signal Engine", script: "signals/engine.js" },
     { name: "Momentum",      script: "strategies/momentum.js" },

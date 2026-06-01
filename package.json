@@ -4,6 +4,8 @@
   "description": "AI-powered crypto meme coin research and paper trading system",
   "type": "module",
   "scripts": {
+    "discover":      "node research/discover.js --chain solana",
+    "discover:mock": "node research/discover.js --mock",
     "screen":     "node screener/rugcheck.js --dry-run",
     "signals":    "node signals/engine.js --dry-run",
     "sentiment":  "node signals/sentiment.js --ticker BONK --dry-run",
