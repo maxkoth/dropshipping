@@ -1,0 +1,16 @@
+{
+  "_note": "Offline sample of a GeckoTerminal OHLCV response (rows are newest-first and intentionally unsorted) to verify lib/geckoterminal.js parseOhlcv().",
+  "data": {
+    "id": "sample",
+    "type": "ohlcv_request_response",
+    "attributes": {
+      "ohlcv_list": [
+        [1717009200, "0.00088", "0.00095", "0.00086", "0.00092", 410000],
+        [1717005600, "0.00071", "0.00090", "0.00070", "0.00088", 720000],
+        [1717002000, "0.00069", "0.00073", "0.00067", "0.00071", 180000],
+        [1716998400, "0.00065", "0.00070", "0.00064", "0.00069", 160000],
+        [1716994800, "0.00063", "0.00066", "0.00061", "0.00065", 140000]
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "_note": "Offline sample of a RugCheck.xyz /tokens/{mint}/report response, used to verify lib/safety.js normalizeRugcheck() without network.",
+  "mint": "FRESHmememcoin1111111111111111111111111111",
+  "mintAuthority": null,
+  "freezeAuthority": null,
+  "rugged": false,
+  "score": 850,
+  "score_normalised": 22,
+  "topHolders": [
+    { "address": "a", "pct": 8.2 },
+    { "address": "b", "pct": 6.1 },
+    { "address": "c", "pct": 4.0 },
+    { "address": "d", "pct": 3.2 },
+    { "address": "e", "pct": 2.1 }
+  ],
+  "markets": [
+    { "lp": { "lpLocked": 1, "lpLockedPct": 100, "lpLockedUSD": 240000 } }
+  ],
+  "risks": [
+    { "name": "Low liquidity", "level": "warn", "score": 200, "description": "Low amount of liquidity in the token pool" }
+  ]
+}

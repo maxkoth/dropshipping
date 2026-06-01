@@ -8,6 +8,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
+import { checkSafety, safetyToChecks } from "../lib/safety.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DRY_RUN = process.argv.includes("--dry-run");
@@ -50,17 +51,23 @@ function simulateChecks(coin) {
     };
   }
 
-  // Production stub — wire up actual Solana/EVM RPC calls here
-  throw new Error(
-    "Production mode requires SOLANA_RPC_URL / ETH_RPC_URL in .env"
-  );
+  // Live mode resolves checks via lib/safety.js (see liveChecks); this stub
+  // should never be hit because simulateChecks is only called in DRY_RUN.
+  throw new Error("simulateChecks called outside dry-run");
 }
 
 // ---------------------------------------------------------------------------
-// Score a single coin
+// Live checks — real RugCheck (Solana) / GoPlus (EVM) data
 // ---------------------------------------------------------------------------
-function screenCoin(coin) {
-  const checks = simulateChecks(coin);
+async function liveChecks(coin) {
+  const safety = await checkSafety(coin);
+  return safetyToChecks(safety, coin);
+}
+
+// ---------------------------------------------------------------------------
+// Score a single coin from a resolved `checks` object
+// ---------------------------------------------------------------------------
+function scoreChecks(coin, checks) {
   const flags = [];
   let score = 100;
 
@@ -122,12 +129,18 @@ function screenCoin(coin) {
     verdict = "FAIL";
   }
 
+  // Surface any extra notes from the live safety source (RugCheck / GoPlus)
+  if (Array.isArray(checks._risks)) {
+    for (const r of checks._risks) if (r && !flags.includes(r)) flags.push(r);
+  }
+
   return {
     symbol: coin.symbol,
     chain: coin.chain,
     contract_address: coin.contract_address,
     verdict,
     score,
+    safety_source: checks._safety_source || (DRY_RUN ? "mock" : "unknown"),
     flags,
     checked_at: new Date().toISOString(),
     raw_checks: checks,
@@ -137,13 +150,17 @@ function screenCoin(coin) {
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
-function main() {
-  console.log(`\n🔍 Rug Pull Screener — ${DRY_RUN ? "DRY RUN" : "LIVE"}\n`);
+async function main() {
+  console.log(`\n🔍 Rug Pull Screener — ${DRY_RUN ? "DRY RUN" : "LIVE (RugCheck / GoPlus)"}\n`);
 
   const discoveriesPath = resolve(__dirname, "../research/discoveries.json");
   const discoveries = JSON.parse(readFileSync(discoveriesPath, "utf8"));
 
-  const results = discoveries.coins.map(screenCoin);
+  const results = [];
+  for (const coin of discoveries.coins) {
+    const checks = DRY_RUN ? simulateChecks(coin) : await liveChecks(coin);
+    results.push(scoreChecks(coin, checks));
+  }
 
   const passed = results.filter((r) => r.verdict === "PASS");
   const warned = results.filter((r) => r.verdict === "WARN");
@@ -170,4 +187,7 @@ function main() {
   console.log(`\nResults saved → ${outPath}`);
 }
 
-main();
+main().catch((e) => {
+  console.error("Fatal:", e.message);
+  process.exit(1);
+});

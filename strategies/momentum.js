@@ -7,9 +7,10 @@
  * Use --dry-run to run against mock data.
  */
 
-import { writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
+import { getOhlcv } from "../lib/geckoterminal.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DRY_RUN = process.argv.includes("--dry-run");
@@ -77,16 +78,48 @@ function detectMomentum(symbol, candles) {
 }
 
 // ---------------------------------------------------------------------------
+// Live candles — real hourly OHLCV per pool from GeckoTerminal.
+// Hourly buckets keep detectMomentum's "1h change" semantics exact.
+// ---------------------------------------------------------------------------
+async function fetchLiveCandles(coin) {
+  if (!coin.pair_address) throw new Error("no pair_address (re-run discovery)");
+  return getOhlcv(coin.chain, coin.pair_address, { timeframe: "hour", aggregate: 1, limit: 48 });
+}
+
+// In live mode, scan the coins discovery found; in dry-run, a static watchlist.
+function loadTargets() {
+  if (DRY_RUN) {
+    return ["PUNCH", "FRENS", "COINCOIN", "GOATSEUS", "BONK"].map((symbol) => ({ symbol }));
+  }
+  const discoveries = JSON.parse(
+    readFileSync(resolve(__dirname, "../research/discoveries.json"), "utf8")
+  );
+  return discoveries.coins || [];
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
-function main() {
-  console.log(`\n📈 Momentum Strategy — ${DRY_RUN ? "DRY RUN" : "LIVE"}\n`);
+async function main() {
+  console.log(`\n📈 Momentum Strategy — ${DRY_RUN ? "DRY RUN" : "LIVE (GeckoTerminal OHLCV)"}\n`);
 
-  const watchlist = ["PUNCH", "FRENS", "COINCOIN", "GOATSEUS", "BONK"];
+  const targets = loadTargets();
   const results = [];
 
-  for (const symbol of watchlist) {
-    const candles = fetchMockCandles(symbol);
+  for (const coin of targets) {
+    const symbol = coin.symbol;
+    let candles;
+    try {
+      candles = DRY_RUN ? fetchMockCandles(symbol) : await fetchLiveCandles(coin);
+    } catch (e) {
+      console.log(`   skip  ${symbol.padEnd(12)} — ${e.message}`);
+      continue;
+    }
+    if (!candles || candles.length < 2) {
+      console.log(`   skip  ${symbol.padEnd(12)} — not enough candle data`);
+      continue;
+    }
+
     const signal = detectMomentum(symbol, candles);
     results.push(signal);
 
@@ -107,4 +140,7 @@ function main() {
   console.log(`Saved → ${outPath}`);
 }
 
-main();
+main().catch((e) => {
+  console.error("Fatal:", e.message);
+  process.exit(1);
+});

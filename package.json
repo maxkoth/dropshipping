@@ -7,6 +7,8 @@
     "discover":      "node research/discover.js --chain solana",
     "discover:mock": "node research/discover.js --mock",
     "screen":     "node screener/rugcheck.js --dry-run",
+    "screen:live":   "node screener/rugcheck.js",
+    "momentum:live": "node strategies/momentum.js",
     "signals":    "node signals/engine.js --dry-run",
     "sentiment":  "node signals/sentiment.js --ticker BONK --dry-run",
     "momentum":   "node strategies/momentum.js --dry-run",
