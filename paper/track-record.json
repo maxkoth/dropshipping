@@ -3,35 +3,53 @@
   "rules": {
     "starting_bankroll_usd": 10000,
     "stake_per_trade_usd": 1000,
-    "selection": "highest-conviction signal from `npm run play` output (not random)",
+    "selection": "highest-conviction signal / judgment pick (not random)",
     "control": "optional parallel random pick, to test signals vs luck",
-    "marking": "each 'go', the prior open position is marked to the new price (a ~1-day hold), then a new pick is opened",
-    "data_source": "live prices pasted by the user each round; the assistant cannot fetch prices from its sandbox"
+    "marking": "each 'go', the prior open position is marked to the new price, then a new pick is opened",
+    "data_source": "live prices via the assistant's WebSearch tool (no user API keys used)",
+    "caveat": "WebSearch prices carry ~±3% source noise; rounds spaced <~1 day apart are dominated by noise, not real moves"
   },
-  "bankroll_usd": 10000,
-  "cash_usd": 9000,
+  "bankroll_usd": 9967.27,
+  "cash_usd": 8967.27,
   "open_positions": [
+    {
+      "round": 2,
+      "symbol": "BONK",
+      "name": "Bonk",
+      "chain": "solana",
+      "opened_at": "2026-06-01",
+      "entry_price_usd": 0.000005501,
+      "stake_usd": 1000,
+      "token_quantity": 181785130,
+      "thesis": "Largest, most-liquid Solana meme by community; consolidating. Deliberately a base-buy on a deep-liquidity name rather than chasing PUNCH (+80,000% since launch, ~$30M cap) which is a classic blow-off-top risk.",
+      "price_source": "WebSearch consensus, entry uncertainty ~±3%"
+    }
+  ],
+  "closed_trades": [
     {
       "round": 1,
       "symbol": "PENGU",
       "name": "Pudgy Penguins",
       "chain": "solana",
       "opened_at": "2026-06-01",
+      "closed_at": "2026-06-01",
       "entry_price_usd": 0.007881,
+      "exit_price_usd": 0.007623,
       "stake_usd": 1000,
-      "token_quantity": 126887.45,
-      "thesis": "Top-tier liquid Solana meme (surfaced as a current leader with ~$73M/24h volume). Buying into a modest pullback (-1.9% 24h, -11.7% 7d) on a strong-community name rather than chasing a thin micro-cap. Daily mark-to-market.",
-      "price_source": "WebSearch consensus (CoinMarketCap), entry uncertainty ~±3%"
+      "return_pct": -3.27,
+      "pnl_usd": -32.73,
+      "outcome": "LOSS",
+      "note": "Marked with ~no elapsed time since entry — result is within source noise, not a real move."
     }
   ],
-  "closed_trades": [],
   "stats": {
-    "rounds_played": 1,
-    "closed_trades": 0,
-    "win_rate": null,
-    "total_realized_pnl_usd": 0,
-    "best_trade": null,
-    "worst_trade": null
+    "rounds_played": 2,
+    "closed_trades": 1,
+    "wins": 0,
+    "win_rate": "0%",
+    "total_realized_pnl_usd": -32.73,
+    "best_trade": { "symbol": "PENGU", "return_pct": -3.27 },
+    "worst_trade": { "symbol": "PENGU", "return_pct": -3.27 }
   },
-  "history_note": "Round 1 (2026-06-01): opened PENGU @ $0.007881, $1000 stake."
+  "history_note": "R1: PENGU @ 0.007881 -> 0.007623 (-3.27%, closed). R2: open BONK @ 0.000005501."
 }
