@@ -1,0 +1,23 @@
+{
+  "description": "Paper-trading track record — 100% SIMULATED. No real money, no wallet, no keys. Updated each time the user says 'go' with live price data.",
+  "rules": {
+    "starting_bankroll_usd": 10000,
+    "stake_per_trade_usd": 1000,
+    "selection": "highest-conviction signal from `npm run play` output (not random)",
+    "control": "optional parallel random pick, to test signals vs luck",
+    "marking": "each 'go', the prior open position is marked to the new price (a ~1-day hold), then a new pick is opened",
+    "data_source": "live prices pasted by the user each round; the assistant cannot fetch prices from its sandbox"
+  },
+  "bankroll_usd": 10000,
+  "open_positions": [],
+  "closed_trades": [],
+  "stats": {
+    "rounds_played": 0,
+    "closed_trades": 0,
+    "win_rate": null,
+    "total_realized_pnl_usd": 0,
+    "best_trade": null,
+    "worst_trade": null
+  },
+  "history_note": "First entry is recorded on the first 'go' that includes live data."
+}
