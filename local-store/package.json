@@ -1,0 +1,11 @@
+{
+  "name": "dropshipping-local-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Self-contained storefront bundle (no Shopify). Checkout via Stripe Payment Links.",
+  "type": "module",
+  "scripts": {
+    "start": "node serve.mjs",
+    "build": "node build-local-store.cjs"
+  }
+}
