@@ -6,13 +6,14 @@
     "selection": "research-based picks, not random",
     "marking": "each 'go', open positions are marked to current prices; realized on close",
     "data_source": "WebSearch consensus price across exchanges",
-    "caveat": "WebSearch prices carry meaningful source noise (±3% typical, more for thinly-aggregated names); only multi-day moves are signal, not intraday marks"
+    "caveat": "WebSearch prices carry meaningful source noise; same-day marks are dominated by noise, not real moves. Wide-dispersion names (e.g. INJ) are unreliable to track this way."
   },
-  "bankroll_usd": 9967.27,
+  "bankroll_usd": 9399.56,
   "cash_usd": 6967.27,
   "weekly_basket": {
     "opened": "2026-06-01",
-    "thesis": "3-coin research basket to test the week's picks (see chat). Backdrop is unfavorable: Bitcoin Season (Alt Season Index 39/100), so this is swimming upstream.",
+    "last_marked": "2026-06-01",
+    "thesis": "3-coin research basket. Backdrop unfavorable: Bitcoin Season (Alt Season Index 39/100).",
     "review_target": "~2026-06-08 (one week)"
   },
   "open_positions": [
@@ -22,11 +23,14 @@
       "chain": "solana",
       "opened_at": "2026-06-01",
       "entry_price_usd": 0.00725,
+      "current_price_usd": 0.0066,
+      "marked_at": "2026-06-01",
       "stake_usd": 1000,
       "token_quantity": 137931.03,
-      "thesis": "Mean-reversion: top-3 Solana meme with brand/IP, below all EMAs with RSI ~44 (oversold, not overbought). Bounces hard if a meme rotation confirms.",
-      "kill_risk": "Below all EMAs = active downtrend; catching a falling knife.",
-      "price_source": "WebSearch consensus ~$0.0071-0.0073"
+      "value_usd": 910.34,
+      "unrealized_pnl_usd": -89.66,
+      "unrealized_return_pct": -8.97,
+      "note": "Marked same-day; mostly noise. Real meme weakness on the week."
     },
     {
       "symbol": "BONK",
@@ -34,11 +38,14 @@
       "chain": "solana",
       "opened_at": "2026-06-01",
       "entry_price_usd": 0.000005501,
+      "current_price_usd": 0.00000441,
+      "marked_at": "2026-06-01",
       "stake_usd": 1000,
       "token_quantity": 181785130,
-      "thesis": "Lowest-variance way to play a possible meme rotation: deepest-liquidity Solana meme; Solana DEX volume +40% on the week, Pump.fun at ATH.",
-      "kill_risk": "Meme season unconfirmed; huge supply needs real inflows to move.",
-      "price_source": "WebSearch consensus"
+      "value_usd": 801.67,
+      "unrealized_pnl_usd": -198.33,
+      "unrealized_return_pct": -19.83,
+      "note": "BONK genuinely soft (-23% 7d); entry quote was on the high side."
     },
     {
       "symbol": "INJ",
@@ -46,11 +53,14 @@
       "chain": "injective",
       "opened_at": "2026-06-01",
       "entry_price_usd": 7.15,
+      "current_price_usd": 5.15,
+      "marked_at": "2026-06-01",
       "stake_usd": 1000,
       "token_quantity": 139.86,
-      "thesis": "Cleaner structure: constructive pullback, full supply circulating (no unlock dump), perp-DEX/on-chain-finance narrative. Measured, not a moonshot.",
-      "kill_risk": "Alt in Bitcoin Season; needs BTC to cooperate. Wide quote dispersion at entry (~±15%).",
-      "price_source": "WebSearch (Coinbase/Kraken/TradingView consensus ~$7.17; some sources lag)"
+      "value_usd": 720.28,
+      "unrealized_pnl_usd": -279.72,
+      "unrealized_return_pct": -27.97,
+      "note": "UNRELIABLE: entry anchored to high quote-cluster (~$7.1), now reading low cluster (~$5.1). This -28% is mostly a WebSearch data artifact, not a real move. WebSearch is too noisy to track INJ honestly."
     }
   ],
   "closed_trades": [
@@ -69,12 +79,15 @@
     }
   ],
   "stats": {
-    "gos_played": 3,
+    "gos_played": 4,
     "open_positions": 3,
     "closed_trades": 1,
     "wins": 0,
     "win_rate": "0%",
-    "total_realized_pnl_usd": -32.73
+    "realized_pnl_usd": -32.73,
+    "unrealized_pnl_usd": -567.71,
+    "total_equity_usd": 9399.56,
+    "total_pnl_vs_start_usd": -600.44
   },
-  "history_note": "Go #3 (2026-06-01): opened weekly basket PENGU @0.00725, BONK @0.000005501, INJ @7.15 ($1000 each). Review ~2026-06-08."
+  "history_note": "Go #4 (2026-06-01): marked basket. PENGU -9.0%, BONK -19.8%, INJ -28.0% (INJ largely a data artifact). Equity $9,399.56. Same-day marks = noise; real review ~2026-06-08."
 }
