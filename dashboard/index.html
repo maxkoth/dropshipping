@@ -260,6 +260,10 @@
 </head>
 <body>
 
+<div style="background:#3a1212;border-bottom:2px solid #ff4444;color:#ff8888;font-family:monospace;font-size:13px;text-align:center;padding:8px 12px;letter-spacing:0.5px">
+  ⚠ SIMULATED — PAPER TRADING ONLY · NO REAL MONEY · numbers below come only from <code>paper/track-record.json</code>; empty panels have no live data source connected
+</div>
+
 <header>
   <div class="logo"><span class="pulse"></span>CRYPTO SIGNAL COMMAND CENTER</div>
   <div class="status-bar">
@@ -338,8 +342,9 @@
 
 <script>
 // ============================================================
-// DATA LOADER — reads JSON files produced by the pipeline
-// Falls back to rich mock data if files aren't available yet
+// DATA LOADER — reads ONLY real files. No mock fallbacks.
+// Portfolio = the real paper ledger (paper/track-record.json).
+// Panels with no connected data source show an honest empty state.
 // ============================================================
 
 async function loadJSON(path) {
@@ -352,84 +357,39 @@ async function loadJSON(path) {
   }
 }
 
-// ── Mock generators ──────────────────────────────────────────
-function mockSignals() {
-  const coins = [
-    { symbol: "PUNCH",      chain: "Solana", signal: "STRONG_BUY", conf: 84, hold: "swing (days)", tp: ["+35%","+80%","+160%"], stop: "-18%", time: "just now" },
-    { symbol: "GOATSEUS",   chain: "Solana", signal: "BUY",        conf: 71, hold: "swing (days)", tp: ["+25%","+55%","+110%"], stop: "-15%", time: "2m ago"  },
-    { symbol: "FRENS",      chain: "Solana", signal: "BUY",        conf: 63, hold: "scalp (mins)", tp: ["+20%","+40%","+80%"],  stop: "-20%", time: "5m ago"  },
-    { symbol: "BONK",       chain: "Solana", signal: "WATCH",      conf: 55, hold: "hold (weeks)", tp: ["+15%","+30%","+60%"],  stop: "-12%", time: "11m ago" },
-    { symbol: "COINCOIN",   chain: "Base",   signal: "AVOID",      conf: 22, hold: "—",            tp: ["—","—","—"],           stop: "—",    time: "15m ago" },
-    { symbol: "DEGENINME",  chain: "Base",   signal: "AVOID",      conf: 18, hold: "—",            tp: ["—","—","—"],           stop: "—",    time: "18m ago" },
-    { symbol: "SOLIDLAUNCH",chain: "Base",   signal: "BUY",        conf: 67, hold: "swing (days)", tp: ["+30%","+65%","+120%"], stop: "-16%", time: "22m ago" },
-    { symbol: "TRUMP",      chain: "Solana", signal: "WATCH",      conf: 48, hold: "hold (weeks)", tp: ["+10%","+22%","+45%"],  stop: "-10%", time: "30m ago" },
-  ];
-  return { signals: coins, generated_at: new Date().toISOString() };
-}
-
-function mockPortfolio() {
+// Map the real paper ledger into the shape the render functions expect.
+function adaptLedger(ledger) {
+  if (!ledger) return null;
+  const open = (ledger.open_positions || []).map(p => ({
+    symbol: p.symbol,
+    chain: p.chain || "—",
+    entry_price: p.entry_price_usd,
+    current_price: p.current_price_usd || null, // null until marked on next "go"
+    position_size_usd: p.stake_usd || 0,
+    stop_loss: "—",
+    take_profit_1: "—",
+  }));
+  const closed = (ledger.closed_trades || []).map(t => ({
+    symbol: t.symbol,
+    pnl_pct: t.return_pct,
+    pnl_usd: t.pnl_usd,
+    closed_at: t.closed_at,
+  }));
+  const deployed = open.reduce((s, p) => s + (p.position_size_usd || 0), 0);
   return {
-    total_capital: 10843.20,
-    deployed: 2140.55,
-    cash_reserve: 8702.65,
-    open_positions: [
-      { symbol: "PUNCH", chain: "Solana", entry_price: 0.00000391, current_price: 0.00000523, position_size_usd: 1200, take_profit_1: 0.0000055, stop_loss: 0.0000032 },
-      { symbol: "GOATSEUS", chain: "Solana", entry_price: 0.01947, current_price: 0.01822, position_size_usd: 940, take_profit_1: 0.027, stop_loss: 0.016 },
-    ],
-    closed_trades: [
-      { symbol: "FRENS", pnl_pct: 42.3, pnl_usd: 423, closed_at: "2026-05-30" },
-      { symbol: "BONK",  pnl_pct: -8.1, pnl_usd: -81, closed_at: "2026-05-29" },
-      { symbol: "PUNCH", pnl_pct: 91.2, pnl_usd: 912, closed_at: "2026-05-28" },
-      { symbol: "COINCOIN", pnl_pct: -18.5, pnl_usd: -185, closed_at: "2026-05-27" },
-      { symbol: "GOATSEUS", pnl_pct: 34.7, pnl_usd: 347, closed_at: "2026-05-26" },
-    ],
-    win_rate: "60%",
-    avg_return_per_trade: "28.3%",
+    total_capital: ledger.bankroll_usd ?? 10000,
+    deployed,
+    cash_reserve: ledger.cash_usd ?? ((ledger.bankroll_usd ?? 10000) - deployed),
+    open_positions: open,
+    closed_trades: closed,
+    win_rate: ledger.stats?.win_rate || "—",
     halted: false,
   };
 }
 
-function mockWhales() {
-  return [
-    { type: "buy",  symbol: "PUNCH",   amount: 47000, label: "Solana Smart Money #1", time: "7m ago" },
-    { type: "buy",  symbol: "GOATSEUS",amount: 18500, label: "Solana Smart Money #1", time: "12m ago" },
-    { type: "sell", symbol: "FRENS",   amount: 23000, label: "Known Meme Trader",     time: "20m ago" },
-    { type: "buy",  symbol: "BONK",    amount: 152000,label: "Whale Cluster #7",      time: "34m ago" },
-  ];
-}
-
-function mockSentiment() {
-  return [
-    { ticker: "PUNCH",   score: 72  },
-    { ticker: "GOATSEUS",score: 58  },
-    { ticker: "FRENS",   score: 41  },
-    { ticker: "BONK",    score: 85  },
-    { ticker: "TRUMP",   score: 33  },
-    { ticker: "COINCOIN",score: -21 },
-    { ticker: "DEGEN",   score: -48 },
-    { ticker: "SOLIDL",  score: 64  },
-  ];
-}
-
-function mockNews() {
-  return [
-    { tag: "BONK",    headline: "BONK whale accumulation accelerates ahead of Q2 end", time: "4m ago" },
-    { tag: "MARKET",  headline: "Total crypto market cap holds above $3.2T despite BTC consolidation", time: "9m ago" },
-    { tag: "SOLANA",  headline: "Solana DEX volume breaks $2.57B daily ATH", time: "18m ago" },
-    { tag: "PUNCH",   headline: "PUNCH community vote passes 2% burn proposal", time: "25m ago" },
-    { tag: "BASE",    headline: "Base TVL reaches $12B as meme season intensifies", time: "41m ago" },
-    { tag: "ALERT",   headline: "SEC crypto guidance update expected this week — watch meme coin volatility", time: "1h ago" },
-  ];
-}
-
-function mockAlerts() {
-  return [
-    { level: "HIGH",   msg: "COINCOIN: mint authority still active — position blocked" },
-    { level: "MEDIUM", msg: "DEGENINME: deployer wallet < 7 days old — elevated rug risk" },
-    { level: "MEDIUM", msg: "Portfolio 60% deployed — approaching max exposure" },
-    { level: "LOW",    msg: "FRENS: whale sold $23k — monitor for further distribution" },
-    { level: "LOW",    msg: "Scheduler: last run 3 minutes ago — all systems nominal" },
-  ];
+// Honest empty-state for panels we have no live data source for.
+function emptyPanel(el, msg) {
+  el.innerHTML = `<div style="color:var(--dim);text-align:center;padding:16px;font-size:11px">${msg}</div>`;
 }
 
 // ============================================================
@@ -516,21 +476,22 @@ function renderPositions(portfolio) {
   }
 
   tbody.innerHTML = positions.map(p => {
-    const cp = p.current_price || p.entry_price;
-    const pnlPct = ((cp - p.entry_price) / p.entry_price * 100).toFixed(1);
-    const pnlUsd = ((cp - p.entry_price) * (p.position_size_usd / p.entry_price)).toFixed(2);
-    const cls = parseFloat(pnlPct) >= 0 ? "pnl-pos" : "pnl-neg";
+    const marked = p.current_price != null;
+    const cp = marked ? p.current_price : p.entry_price;
+    const pnlPct = marked ? ((cp - p.entry_price) / p.entry_price * 100).toFixed(1) : null;
+    const pnlUsd = marked ? ((cp - p.entry_price) * (p.position_size_usd / p.entry_price)).toFixed(2) : null;
+    const cls = pnlPct == null ? "" : (parseFloat(pnlPct) >= 0 ? "pnl-pos" : "pnl-neg");
     return `
       <tr>
         <td style="color:#fff;font-weight:bold">$${p.symbol}</td>
         <td style="color:var(--purple)">${p.chain}</td>
         <td>$${p.entry_price}</td>
-        <td>$${cp}</td>
+        <td>${marked ? "$" + cp : '<span style="color:var(--dim)">unmarked</span>'}</td>
         <td>$${(p.position_size_usd||0).toFixed(2)}</td>
-        <td class="${cls}">${pnlPct >= 0 ? "+" : ""}${pnlPct}%</td>
-        <td class="${cls}">${pnlUsd >= 0 ? "+" : ""}$${pnlUsd}</td>
-        <td style="color:var(--red)">$${p.stop_loss}</td>
-        <td style="color:var(--green)">$${p.take_profit_1}</td>
+        <td class="${cls}">${pnlPct == null ? "—" : (pnlPct >= 0 ? "+" : "") + pnlPct + "%"}</td>
+        <td class="${cls}">${pnlUsd == null ? "—" : (pnlUsd >= 0 ? "+" : "") + "$" + pnlUsd}</td>
+        <td style="color:var(--red)">${p.stop_loss}</td>
+        <td style="color:var(--green)">${p.take_profit_1}</td>
       </tr>`;
   }).join("");
 }
@@ -558,7 +519,8 @@ function initCharts(portfolio) {
     (a,b) => new Date(a.closed_at) - new Date(b.closed_at)
   );
 
-  let running = 10000;
+  const startCapital = 10000;
+  let running = startCapital;
   const labels = ["Start"];
   const values = [running];
   trades.forEach(t => {
@@ -566,9 +528,11 @@ function initCharts(portfolio) {
     labels.push(t.symbol);
     values.push(parseFloat(running.toFixed(2)));
   });
-  if (portfolio?.deployed > 0) {
+  // "Now" = actual portfolio value (realized only; open positions are unmarked
+  // at cost, so they add no gain). Never add deployed cash as if it were profit.
+  if (portfolio?.total_capital != null) {
     labels.push("Now");
-    values.push(parseFloat((running + (portfolio.deployed||0)).toFixed(2)));
+    values.push(parseFloat(portfolio.total_capital.toFixed(2)));
   }
 
   const gradient = pnlCtx.createLinearGradient(0, 0, 0, 300);
@@ -646,25 +610,47 @@ function startCountdown() {
 }
 
 async function refresh() {
-  const [signalsData, portfolioData] = await Promise.all([
+  const [signalsData, ledgerData, screenerData] = await Promise.all([
     loadJSON("../data/signals.json"),
-    loadJSON("../data/portfolio-tracker.json"),
+    loadJSON("../paper/track-record.json"),
+    loadJSON("../data/screener-results.json"),
   ]);
 
-  const signals   = signalsData   || mockSignals();
-  const portfolio = portfolioData || mockPortfolio();
+  const portfolio = adaptLedger(ledgerData) || {
+    total_capital: 10000, deployed: 0, cash_reserve: 10000,
+    open_positions: [], closed_trades: [], win_rate: "—", halted: false,
+  };
 
-  renderSignals(signals);
-  renderAlerts(mockAlerts());
-  renderWhales(mockWhales());
-  renderHeatmap(mockSentiment());
+  // Signals: real pipeline output only
+  if (signalsData && Array.isArray(signalsData.signals) && signalsData.signals.length) {
+    renderSignals(signalsData);
+  } else {
+    emptyPanel(document.getElementById("signals-feed"),
+      "No live signals. Run <code>npm run play</code> on your machine to generate data/signals.json");
+    document.getElementById("signals-ts").textContent = "";
+  }
+
+  // Risk alerts: derived from real screener flags only
+  const alerts = [];
+  if (screenerData && Array.isArray(screenerData.results)) {
+    for (const r of screenerData.results) {
+      if (r.verdict === "FAIL") (r.flags || []).forEach(f => alerts.push({ level: "HIGH",   msg: `${r.symbol}: ${f}` }));
+      else if (r.verdict === "WARN") (r.flags || []).forEach(f => alerts.push({ level: "MEDIUM", msg: `${r.symbol}: ${f}` }));
+    }
+  }
+  if (alerts.length) renderAlerts(alerts.slice(0, 8));
+  else emptyPanel(document.getElementById("alerts-panel"), "No screener data. Run <code>npm run screen:live</code>");
+
+  // Panels with no connected live data source — honest empty states
+  emptyPanel(document.getElementById("whale-feed"), "No whale-tracking source connected (needs Nansen/Arkham API)");
+  emptyPanel(document.getElementById("heatmap"),    "No sentiment source connected");
+  if (document.getElementById("news-feed")) emptyPanel(document.getElementById("news-feed"), "No news source connected");
+
   renderPositions(portfolio);
-  renderNews(mockNews());
 
   if (pnlChart) { pnlChart.destroy(); allocChart.destroy(); }
   initCharts(portfolio);
 
-  document.getElementById("signals-ts").textContent = new Date().toLocaleTimeString();
   startCountdown();
 }
 
