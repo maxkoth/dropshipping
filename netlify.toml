@@ -1,0 +1,20 @@
+# Auto-deploy config: connect this repo to Netlify (or Cloudflare Pages) and the
+# storefront publishes automatically. Every push to main re-deploys the live site.
+# It's a static site, so there is no build step.
+[build]
+  publish = "local-store"
+  command = ""
+
+# Clean URLs: /store-3 → /store-3/index.html
+[[redirects]]
+  from = "/store-1"
+  to = "/store-1/index.html"
+  status = 200
+[[redirects]]
+  from = "/store-2"
+  to = "/store-2/index.html"
+  status = 200
+[[redirects]]
+  from = "/store-3"
+  to = "/store-3/index.html"
+  status = 200
