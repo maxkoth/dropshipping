@@ -1,8 +1,9 @@
-#:schema node_modules/wrangler/config-schema.json
-# Serves the static store bundle (local-store/) as a Cloudflare Worker with
-# static assets. No build step, no server code — Cloudflare just hosts the files.
-name = "linguaflow"
+# Serves the static store bundle (local-store/) via Cloudflare Workers.
+# Name matches the Workers Builds project so the dashboard can't override it.
+name = "dropshipping"
+main = "worker.js"
 compatibility_date = "2025-01-01"
 
 [assets]
 directory = "./local-store"
+binding = "ASSETS"
