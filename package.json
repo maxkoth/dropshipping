@@ -4,28 +4,33 @@
   "description": "AI-powered crypto meme coin research and paper trading system",
   "type": "module",
   "scripts": {
-    "discover":      "node research/discover.js --chain solana",
+    "discover": "node research/discover.js --chain solana",
     "discover:mock": "node research/discover.js --mock",
-    "screen":     "node screener/rugcheck.js --dry-run",
-    "screen:live":   "node screener/rugcheck.js",
+    "screen": "node screener/rugcheck.js --dry-run",
+    "screen:live": "node screener/rugcheck.js",
     "momentum:live": "node strategies/momentum.js",
-    "signals":    "node signals/engine.js --dry-run",
-    "signals:live":  "node signals/engine.js",
-    "play":          "node research/discover.js --chain solana && node screener/rugcheck.js && node signals/engine.js && node strategies/momentum.js",
-    "sentiment":  "node signals/sentiment.js --ticker BONK --dry-run",
-    "momentum":   "node strategies/momentum.js --dry-run",
-    "sniper":     "node strategies/new-launch-sniper.js --dry-run",
-    "cex":        "node strategies/cex-listing-play.js --dry-run",
-    "whale":      "node strategies/whale-follow.js --dry-run",
-    "risk":       "node risk/manager.js --dry-run",
-    "paper":      "node automation/paper-trader.js --dry-run",
-    "report":     "node automation/paper-trader.js --report --dry-run",
-    "alerts":     "node automation/alert-bot.js all --dry-run",
-    "schedule":   "node automation/scheduler.js --once --dry-run",
-    "run-all":    "node automation/scheduler.js --once --dry-run",
-    "dashboard":  "echo 'Open dashboard/index.html in your browser'"
+    "signals": "node signals/engine.js --dry-run",
+    "signals:live": "node signals/engine.js",
+    "play": "node research/discover.js --chain solana && node screener/rugcheck.js && node signals/engine.js && node strategies/momentum.js",
+    "sentiment": "node signals/sentiment.js --ticker BONK --dry-run",
+    "momentum": "node strategies/momentum.js --dry-run",
+    "sniper": "node strategies/new-launch-sniper.js --dry-run",
+    "cex": "node strategies/cex-listing-play.js --dry-run",
+    "whale": "node strategies/whale-follow.js --dry-run",
+    "risk": "node risk/manager.js --dry-run",
+    "paper": "node automation/paper-trader.js --dry-run",
+    "report": "node automation/paper-trader.js --report --dry-run",
+    "alerts": "node automation/alert-bot.js all --dry-run",
+    "schedule": "node automation/scheduler.js --once --dry-run",
+    "run-all": "node automation/scheduler.js --once --dry-run",
+    "dashboard": "echo 'Open dashboard/index.html in your browser'",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.98.0"
   }
 }
