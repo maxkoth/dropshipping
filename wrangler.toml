@@ -1,6 +1,6 @@
 # Serves the static store bundle (local-store/) via Cloudflare Workers.
-# Name matches the Workers Builds project so the dashboard can't override it.
-name = "dropshipping"
+# Unique name so it never collides with other Workers in this account.
+name = "linguaflow"
 main = "worker.js"
 compatibility_date = "2025-01-01"
 
