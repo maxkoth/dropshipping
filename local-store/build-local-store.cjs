@@ -46,7 +46,7 @@ function patchCheckout(js, pid) {
 }
 function patchHtml(html) {
   return html.replace(/<script src="checkout-redirect\.js"><\/script>/g,
-    '<script src="../payment-links.js"></script>\n  <script src="checkout-redirect.js"></script>');
+    '<script src="../payment-links.js"></script>\n  <script src="../product-images.js"></script>\n  <script src="checkout-redirect.js"></script>\n  <script src="../apply-images.js"></script>');
 }
 
 const stores = discoverStores();
@@ -82,6 +82,55 @@ ${entries}
 };
 `);
   console.log('• payment-links.js created with placeholder links.');
+}
+
+// 2b) Product images: apply-images.js (logic, always rewritten) + product-images.js (config, preserved)
+fs.writeFileSync(path.join(ROOT, 'apply-images.js'), `(function () {
+  var m = location.pathname.match(/store-(\\d+)/);
+  if (!m) return;
+  var imgs = ((window.PRODUCT_IMAGES || {})['store-' + m[1]]) || [];
+  if (!imgs.length) return; // no URLs set -> keep the emoji placeholder
+  function paint(el, url) {
+    if (!el || !url) return;
+    el.textContent = '';
+    el.style.backgroundImage = 'url(' + JSON.stringify(url) + ')';
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+    el.style.backgroundRepeat = 'no-repeat';
+  }
+  function run() {
+    document.querySelectorAll('.hero-img-placeholder,.product-img-placeholder,.demo-img-placeholder,.science-img-placeholder,.product-img-pl,.gallery-main').forEach(function (el) { paint(el, imgs[0]); });
+    var thumbs = document.querySelectorAll('.gallery-thumb');
+    thumbs.forEach(function (t, i) {
+      var url = imgs[i % imgs.length];
+      paint(t, url);
+      t.onclick = function () {
+        paint(document.getElementById('main-img'), url);
+        thumbs.forEach(function (x) { x.classList.remove('active'); });
+        t.classList.add('active');
+      };
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+})();
+`);
+
+const imagesPath = path.join(ROOT, 'product-images.js');
+if (fs.existsSync(imagesPath)) {
+  console.log('• product-images.js already exists — preserved (your image URLs are untouched).');
+} else {
+  fs.writeFileSync(imagesPath, `/* Product images — paste real photo URLs per store.
+   First URL = main/hero photo; the rest become gallery thumbnails.
+   Empty array = keep the emoji placeholder.
+   Get URLs from your supplier's real product listing, or send the photos to me to host. */
+window.PRODUCT_IMAGES = {
+  'store-1': [], // GlowLab — LED face mask
+  'store-2': [], // SaunaZen — infrared sauna blanket
+  'store-3': [], // LinguaFlow — translation earbuds
+};
+`);
+  console.log('• product-images.js created (empty — add image URLs to show photos).');
 }
 
 // 3) Landing page linking to all discovered stores
